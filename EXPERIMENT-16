@@ -1,0 +1,48 @@
+import cv2
+import numpy as np
+from google.colab import files
+
+# Upload video
+uploaded = files.upload()
+
+# Load the video file (replace 'video.mp4' with your actual uploaded video filename)
+video_path = 'video.mp4'  # Replace with your uploaded video file name
+cap = cv2.VideoCapture(video_path)
+
+# Get video properties (width, height, FPS)
+fps = cap.get(cv2.CAP_PROP_FPS)
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+# Create a VideoWriter object to save the output video
+output_path = 'output_canny_video.mp4'  # Output video filename
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Codec for .mp4 files
+out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+
+# Process the video frame by frame
+while cap.isOpened():
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    # Convert frame to grayscale
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # Apply Gaussian Blur
+    blurred_frame = cv2.GaussianBlur(gray_frame, (5, 5), 0)
+
+    # Apply Canny Edge Detection
+    edges_frame = cv2.Canny(blurred_frame, 50, 150)
+
+    # Write the processed frame (edges) to the output video
+    out.write(cv2.cvtColor(edges_frame, cv2.COLOR_GRAY2BGR))
+
+# Release the video objects
+cap.release()
+out.release()
+
+# Display the result message
+print(f"Canny edge detection video has been saved as {output_path}")
+
+# Download the transformed video
+files.download(output_path)
