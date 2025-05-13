@@ -1,0 +1,26 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load the uploaded image (replace 'image.jpg' with your uploaded file name)
+image_path = 'image.jpg'  # Change this to the actual filename you uploaded
+
+# Check if the image file exists
+import os
+if not os.path.exists(image_path):
+    print(f"Error: Image file '{image_path}' not found.")
+    # You might need to upload the image to the Colab environment 
+    # or provide the correct path to the image file.
+    # For example: from google.colab import files
+    #             uploaded = files.upload()
+    #             image_path = list(uploaded.keys())[0] 
+else:
+    image = cv2.imread(image_path)  # Read image using OpenCV
+    
+    # Check if image loading was successful
+    if image is None:
+        print(f"Error: Could not load image from '{image_path}'.")
+    else:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB for display
+
+        # ... (Rest of the code remains the same) ...
