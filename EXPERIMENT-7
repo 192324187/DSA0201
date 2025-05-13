@@ -1,0 +1,50 @@
+from IPython.display import display, Javascript
+from google.colab.output import eval_js
+from base64 import b64decode
+import cv2
+import numpy as np
+import io
+
+# Record from webcam using JavaScript
+def record_video(filename='video.mp4'):
+    js = Javascript("""
+    async function recordVideo() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({video: true});
+            const recorder = new MediaRecorder(stream);
+            const chunks = [];
+
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.start();
+
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Record for 5 seconds
+
+            recorder.stop();
+            await new Promise(resolve => recorder.onstop = resolve);
+
+            const blob = new Blob(chunks, {type: 'video/mp4'});
+            const arrayBuffer = await blob.arrayBuffer();
+            const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+
+            return base64String;
+        } catch (error) {
+            console.error('Error accessing webcam:', error);
+            // Return an error message instead of throwing
+            return 'Error: ' + error.message; 
+        }
+    }
+    recordVideo();
+    """)
+    display(js)
+    video_data = eval_js("recordVideo()")
+    
+    # Check if there was an error before decoding
+    if video_data.startswith('Error: '):
+        print(video_data)  # Print the error message to console
+    else:
+        binary = b64decode(video_data)
+        with open(filename, 'wb') as f:
+            f.write(binary)
+        print("Video saved as", filename)
+
+record_video()
