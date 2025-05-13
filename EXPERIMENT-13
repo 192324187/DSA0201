@@ -1,0 +1,45 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load the uploaded video file (Change 'video.mp4' with your uploaded file name)
+video_path = 'video.mp4'  # Replace with your video file name
+cap = cv2.VideoCapture(video_path)
+
+# Get the video's width, height, and frames per second (FPS)
+fps = cap.get(cv2.CAP_PROP_FPS)
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+# Define the 4 points for perspective transformation (e.g., the corners of the image)
+src_points = np.float32([
+    [100, 100],  # top-left corner
+    [width - 100, 100],  # top-right corner
+    [100, height - 100],  # bottom-left corner
+    [width - 100, height - 100]  # bottom-right corner
+])
+
+# Define the destination points (where you want the source points to map)
+dst_points = np.float32([
+    [150, 150],  # top-left corner (moving down and right)
+    [width - 50, 100],  # top-right corner
+    [50, height - 50],  # bottom-left corner
+    [width - 150, height - 100]  # bottom-right corner
+])
+
+# Get the perspective transform matrix
+matrix = cv2.getPerspectiveTransform(src_points, dst_points)
+
+# Create a VideoWriter object to save the output video
+output_path = 'output_video.mp4'  # Output video file name
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Codec for .mp4 files
+out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+
+# Process the video frame by frame
+while cap.isOpened():
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    # Apply perspective transformation to the frame
+    transformed_frame = cv2.warpPersp_
