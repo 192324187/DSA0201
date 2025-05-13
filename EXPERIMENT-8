@@ -1,0 +1,16 @@
+import cv2
+import matplotlib.pyplot as plt
+
+# Load the uploaded image. Provide the correct path to the image file.
+# If the image is not in the current directory, specify the full path.
+image_path = 'image.jpg'  # Replace 'image.jpg' with the correct path if needed
+image = cv2.imread(image_path)
+
+# Check if the image was loaded successfully
+if image is None:
+    print(f"Error: Could not load image from '{image_path}'. Please check the file path.")
+else:
+    # Proceed with image processing if image loading was successful
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert color from BGR to RGB
+
+    # ... (rest of the code) ...
