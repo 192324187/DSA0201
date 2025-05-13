@@ -1,0 +1,32 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load the uploaded image (replace 'image.jpg' with your uploaded file name)
+image_path = 'image.jpg'  # Change this to the actual filename you uploaded
+image = cv2.imread(image_path)  # Read image using OpenCV
+
+# Check if the image was loaded successfully
+if image is None:
+    print(f"Error: Could not load image from {image_path}. Please check the file path.")
+else:    
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB for display
+
+    # Get the image dimensions
+    height, width = image.shape[:2]
+
+    # Define the affine transformation matrix
+    # Here, we perform a combination of translation, scaling, and rotation
+
+    # For example, we want to translate (shift by 50 pixels to the right and 30 pixels down),
+    # rotate by 45 degrees, and scale by a factor of 1.2 (20% larger).
+    tx, ty = 50, 30
+    scale = 1.2
+    angle = 45
+
+    # Get the rotation matrix for rotating around the center of the image
+    center = (width / 2, height / 2)
+    M_rotate = cv2.getRotationMatrix2D(center, angle, scale)
+
+    # Add translation to the matrix (move the image by tx and ty)
+    M_rotate[0]
