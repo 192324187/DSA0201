@@ -1,0 +1,37 @@
+import cv2
+import numpy as np
+from google.colab import files
+
+# Load the uploaded video file (replace 'video.mp4' with your actual file name)
+video_path = 'video.mp4'  # Replace with the name of your uploaded video
+cap = cv2.VideoCapture(video_path)
+
+# Check if the video file was opened successfully
+if not cap.isOpened():
+  print(f"Error opening video file: {video_path}")
+  # Handle the error appropriately, e.g., exit the script or try a different video file
+  # exit()
+
+# Get the video's width, height, and frames per second (FPS)
+fps = cap.get(cv2.CAP_PROP_FPS)
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+# Print video properties for debugging
+print(f"FPS: {fps}, Width: {width}, Height: {height}")
+
+# ... (rest of the code remains the same) ...
+
+# Create a VideoWriter object to save the output video
+output_path = 'output_dlt_video.mp4'  # Output video filename
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Codec for .mp4 files
+out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+
+# Check if VideoWriter was created successfully
+if not out.isOpened():
+  print("Error creating VideoWriter object.")
+  # Handle the error appropriately
+  cap.release()
+  exit()
+
+# ... (rest of the code remains the same) ...
